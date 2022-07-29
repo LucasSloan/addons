@@ -38,6 +38,7 @@ class AveragedOptimizerWrapper(tf.keras.optimizers.Optimizer, metaclass=abc.ABCM
             )
 
         self._optimizer = optimizer
+        self._optimizer._iterations = self.iterations
         self._track_trackable(self._optimizer, "awg_optimizer")
 
     def _create_slots(self, var_list):
@@ -52,7 +53,6 @@ class AveragedOptimizerWrapper(tf.keras.optimizers.Optimizer, metaclass=abc.ABCM
         return self._optimizer._prepare_local(var_device, var_dtype, apply_state)
 
     def apply_gradients(self, grads_and_vars, name=None, **kwargs):
-        self._optimizer._iterations = self.iterations
         return super().apply_gradients(grads_and_vars, name, **kwargs)
 
     @abc.abstractmethod
